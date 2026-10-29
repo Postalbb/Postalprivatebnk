@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virement Bancaire - BANQUE POSTAL </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="https://unpkg.com/ionicons%405.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons%405.5.2/dist/ionicons/ionicons.js"></script>
+  <style>
+:root {
+  --primary-green: #005cf7;
+  --dark-green: #0e87eb;
+  --light-green: #0b39e9;
+  --success-green: #10b981;
+  --danger-red: #ef4444;
+  --warning-orange: #f59e0b;
+  --background-light: #f8fafc;
+  --background-white: #ffffff;
+  --text-primary: #1a202c;
+  --text-secondary: #718096;
+  --border-light: #e2e8f0;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--background-light) 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  padding-bottom: 80px;
+  color: var(--text-primary);
+}
+
+/* Header moderne */
+.header {
+  background: var(--background-white);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bank-logo {
+  height: 45px;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+.bank-logo:hover {
+  transform: scale(1.05);
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, var(--danger-red), #dc2626);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+  color: white;
+  padding: 3rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 40%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(3deg); }
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Main Container */
+.main-container {
+  max-width: 1200px;
+  margin: -2rem auto 2rem;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Form Card */
+.form-card {
+  background: var(--background-white);
+  border-radius: 24px;
+  box-shadow: var(--shadow-xl);
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+
+.form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.form-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.form-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.form-section {
+  background: rgba(0, 132, 74, 0.02);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(0, 132, 74, 0.1);
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: var(--background-white);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(0, 132, 74, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.form-input:focus + .input-icon {
+  color: var(--primary-green);
+}
+
+.form-select {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: var(--background-white);
+  cursor: pointer;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: var(--background-white);
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Amount Section Spéciale */
+.amount-section {
+  background: linear-gradient(135deg, rgba(0, 132, 74, 0.05), rgba(0, 168, 107, 0.05));
+  border: 2px solid rgba(0, 132, 74, 0.2);
+}
+
+.amount-input {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--primary-green);
+}
+
+/* Button Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  min-width: 180px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0, 132, 74, 0.3);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--text-secondary), #4a5568);
+  color: white;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(113, 128, 150, 0.3);
+}
+
+.btn-info {
+  background: linear-gradient(135deg, var(--info-blue), #2563eb);
+  color: white;
+}
+
+.btn-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Loading State */
+.loading {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-left: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Navigation Bottom */
+.navigation_bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--background-white);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  z-index: 1000;
+  border-top: 1px solid var(--border-light);
+}
+
+.navigation {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 0;
+}
+
+.navigation ul {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.navigation .list {
+  position: relative;
+  width: 80px;
+  z-index: 2;
+}
+
+.navigation .list a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: 0.3s;
+  padding: 8px 0;
+}
+
+.navigation .list.active a {
+  color: var(--primary-green);
+  transform: translateY(-4px);
+}
+
+.navigation .icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+  transition: 0.3s;
+}
+
+.navigation .text {
+  font-size: 12px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.indicator {
+  position: absolute;
+  height: 3px;
+  bottom: -12px;
+  width: 50px;
+  background: var(--primary-green);
+  border-radius: 3px;
+  transition: 0.3s;
+}
+
+.navigation .list:nth-child(1).active ~ .indicator {
+  transform: translateX(calc(80px * 0 + 15px));
+}
+.navigation .list:nth-child(2).active ~ .indicator {
+  transform: translateX(calc(80px * 1 + 15px));
+}
+.navigation .list:nth-child(3).active ~ .indicator {
+  transform: translateX(calc(80px * 2 + 15px));
+}
+.navigation .list:nth-child(4).active ~ .indicator {
+  transform: translateX(calc(80px * 3 + 15px));
+}
+.navigation .list:nth-child(5).active ~ .indicator {
+  transform: translateX(calc(80px * 4 + 15px));
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .main-container {
+    margin: -1rem auto 2rem;
+    padding: 0 1rem;
+  }
+  
+  .form-card {
+    padding: 2rem;
+    border-radius: 20px;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .form-section {
+    padding: 1.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 1rem;
+  }
+  
+  .page-title {
+    font-size: 1.2rem;
+  }
+  
+  .form-card {
+    padding: 1.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.1rem;
+  }
+  
+  .hero-title {
+    font-size: 1.75rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Animations d'entrée */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.form-section:nth-child(1) { animation-delay: 0.1s; }
+.form-section:nth-child(2) { animation-delay: 0.2s; }
+.form-section:nth-child(3) { animation-delay: 0.3s; }
+</style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-title">
+      <img src="assets/images/logo.png" alt="BANQUE POSTAL" class="bank-logo">
+      <h1 class="page-title">Virement bancaire</h1>
+    </div>
+    <button class="logout-btn" onclick="deconnexion()">
+      <i class="fas fa-sign-out-alt"></i>
+      Déconnexion
+    </button>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Effectuer un Virement</h1>
+      <p class="hero-subtitle">Transférez votre argent en toute sécurité</p>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <div class="form-card">
+      <div class="form-header">
+        <h2 class="form-title">Nouveau transfert</h2>
+        <p class="form-subtitle">Remplissez les champs ci-dessous pour effectuer votre virement.</p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; padding: 0.5rem 1rem; background: rgba(40, 167, 69, 0.1); border-radius: 20px; font-size: 0.85rem; color: #28a745;">
+          <i class="fas fa-shield-alt"></i>
+          <span>Système sécurisé BANQUE POSTAL </span>
+        </div>
+      </div>
+
+      <form id="virementForm">
+        <div class="form-grid">
+          <!-- Section Expéditeur -->
+          <div class="form-section">
+            <h3 class="section-title">
+              <div class="section-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              Informations sur l'expéditeur
+            </h3>
+            
+            <div class="form-group">
+              <label class="form-label" for="nom">nom *</label>
+              <div class="input-wrapper">
+                <input type="text" id="nom" name="nom" class="form-input" required placeholder="Το όνομά σας" value="Romain">
+                <i class="fas fa-user input-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="prenom">prenom *</label>
+              <div class="input-wrapper">
+                <input type="text" id="prenom" name="prenom" class="form-input" required placeholder="Το όνομά σας" value="Brossard">
+                <i class="fas fa-user input-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Bénéficiaire -->
+          <div class="form-section">
+            <h3 class="section-title">
+              <div class="section-icon">
+                <i class="fas fa-university"></i>
+              </div>
+              Informations sur le bénéficiaire
+            </h3>
+            
+            <div class="form-group">
+              <label class="form-label" for="banque">Banque *</label>
+              <div class="input-wrapper">
+                <select id="banque" name="banque" class="form-select" required>
+                  <option value="">Sélectionnez une banque</option>
+                  <option value="BNP Paribas">CREDIT AGRICOLE</option>
+                  <option value="Crédit Agricole">Crédit Agricole</option>
+                  <option value="Société Générale">Société Générale</option>
+                  <option value="CIC">CIC</option>
+                  <option value="Autre">Autre</option>
+                </select>
+                <i class="fas fa-university input-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="iban">IBAN *</label>
+              <div class="input-wrapper">
+                <input type="text" id="iban" name="iban" class="form-input" required placeholder="FR76 0110 1250 0000 0001 2300 695">
+                <i class="fas fa-credit-card input-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="swift">Code SWIFT</label>
+              <div class="input-wrapper">
+                <input type="text" id="swift" name="swift" class="form-input" placeholder="PIRBGRAXXXX">
+                <i class="fas fa-code input-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Montant -->
+          <div class="form-section amount-section">
+            <h3 class="section-title">
+              <div class="section-icon">
+                <i class="fas fa-euro-sign"></i>
+              </div>
+              Montant du transfert
+            </h3>
+            
+            <div class="form-group">
+              <label class="form-label" for="montant">montant *</label>
+              <div class="input-wrapper">
+                <input type="number" id="montant" name="montant" class="form-input amount-input" required 
+                       placeholder="0.00" min="0" step="0.01">
+                <i class="fas fa-euro-sign input-icon"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="dest_tel">Numéro de téléphone du bénéficiaire</label>
+              <div class="input-wrapper">
+                <input type="tel" id="dest_tel" name="dest_tel" class="form-input" 
+                       placeholder="+33 6 12 34 56 78">
+                <i class="fas fa-phone input-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Libellé -->
+          <div class="form-section">
+            <h3 class="section-title">
+              <div class="section-icon">
+                <i class="fas fa-comment"></i>
+              </div>
+              Raison du transfert
+            </h3>
+            
+            <div class="form-group">
+              <label class="form-label" for="libelle">Légende *</label>
+              <div class="input-wrapper">
+                <textarea id="libelle" name="libelle" class="form-textarea" required 
+                          placeholder="Décrivez le motif de ce virement..."></textarea>
+                <i class="fas fa-comment input-icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" id="resetBtn" class="btn btn-secondary">
+            <i class="fas fa-undo"></i>
+            Réinitialisation
+          </button>
+          <button type="submit" id="submitBtn" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i>
+            Valider le transfert
+            <div class="loading">
+              <div class="spinner"></div>
+            </div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Navigation Bottom -->
+  <div class="navigation_bar">
+    <div class="navigation">
+      <ul>
+        <li class="list">
+          <a href="solde.html">
+            <span class="icon">
+              <ion-icon name="home-outline"></ion-icon>
+            </span>
+            <span class="text">Page d'accueil</span>
+          </a>
+        </li>
+        <li class="list active">
+          <a href="virement.html">
+            <span class="icon">
+              <ion-icon name="send-outline"></ion-icon>
+            </span>
+            <span class="text">Virement</span>
+          </a>
+        </li>
+        <li class="list">
+          <a href="historique.html">
+            <span class="icon">
+              <ion-icon name="time-outline"></ion-icon>
+            </span>
+            <span class="text">Historique</span>
+          </a>
+        </li>
+        <li class="list">
+          <a href="cartes.html">
+            <span class="icon">
+              <ion-icon name="card-outline"></ion-icon>
+            </span>
+            <span class="text">Cartes</span>
+          </a>
+        </li>
+        <li class="list">
+          <a href="rib.html">
+            <span class="icon">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </span>
+            <span class="text">RIB</span>
+          </a>
+        </li>
+        <div class="indicator"></div>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript optimisé avec animations
+    const form = document.getElementById('virementForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Animation d'entrée pour les sections
+    document.addEventListener('DOMContentLoaded', function() {
+      const sections = document.querySelectorAll('.form-section');
+      sections.forEach((section, index) => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+          section.style.transition = 'all 0.6s ease-out';
+          section.style.opacity = '1';
+          section.style.transform = 'translateY(0)';
+        }, index * 150);
+      });
+    });
+
+    // Formatage automatique de l'IBAN
+    document.getElementById('iban').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
+      if (value.endsWith(' ')) {
+        value = value.slice(0, -1);
+      }
+      e.target.value = value.toUpperCase();
+    });
+
+    // Formatage du montant
+    document.getElementById('montant').addEventListener('input', function(e) {
+      const value = parseFloat(e.target.value);
+      if (value > 0) {
+        e.target.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.05))';
+        e.target.style.borderColor = 'var(--success-green)';
+      } else {
+        e.target.style.background = '';
+        e.target.style.borderColor = '';
+      }
+    });
+
+    // Fonction pour vider les champs du formulaire
+    function resetFormFields() {
+      const inputs = form.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.value = '';
+        input.style.background = '';
+        input.style.borderColor = '';
+      });
+      
+      const selects = form.querySelectorAll('select');
+      selects.forEach(select => {
+        if (select.options.length > 0) {
+          select.selectedIndex = 0;
+        }
+      });
+
+      // Animation de réinitialisation
+      inputs.forEach((input, index) => {
+        setTimeout(() => {
+          input.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            input.style.transform = 'scale(1)';
+          }, 100);
+        }, index * 50);
+      });
+    }
+
+    // Event listener pour le bouton reset
+    resetBtn.addEventListener('click', function() {
+      Swal.fire({
+        title: 'Réinitialiser le formulaire ?',
+        text: 'Toutes les données saisies seront perdues.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--primary-green)',
+        cancelButtonColor: 'var(--text-secondary)',
+        confirmButtonText: 'Oui, réinitialiser',
+        cancelButtonText: 'Annuler'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          resetFormFields();
+          Swal.fire({
+            icon: 'success',
+            title: 'Formulaire réinitialisé',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000
+          });
+        }
+      });
+    });
+
+    // Soumission du formulaire
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      // Validation côté client
+      const montant = parseFloat(document.getElementById('montant').value);
+      if (montant <= 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Montant invalide',
+          text: 'Le montant doit être supérieur à 0€',
+          confirmButtonColor: 'var(--primary-green)'
+        });
+        return;
+      }
+
+      // État de chargement
+      submitBtn.disabled = true;
+      submitBtn.querySelector('.loading').style.display = 'block';
+      submitBtn.querySelector('i').style.display = 'none';
+      submitBtn.style.background = 'linear-gradient(135deg, var(--text-secondary), #4a5568)';
+      
+      try {
+        const formData = new FormData(this);
+        
+        const response = await fetch('virement-2.html', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          // Animation de succès
+          submitBtn.style.background = 'linear-gradient(135deg, var(--success-green), #059669)';
+          submitBtn.innerHTML = '<i class="fas fa-check"></i> Virement effectué !';
+          
+          // Vider le formulaire
+          resetFormFields();
+          
+          // Préparer le message de succès avec détails
+          let successText = `Votre virement de ${montant}€ a été effectué avec succès.`;
+          if (data.reference) {
+            successText += `\n\nRéférence: ${data.reference}`;
+          }
+          // Notification de succès détaillée
+          await Swal.fire({
+            icon: 'success',
+            title: '🎉 Virement réussi !',
+            html: `
+              <div style="text-align: left; margin: 20px 0;">
+                <p><strong>✅ Virement de ${montant}€ effectué avec succès</strong></p>
+                ${data.reference ? `<p>📋 <strong>Référence:</strong> <code style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-family: monospace;">${data.reference}</code></p>` : ''}
+                <p>�Votre transfert a été enregistré et sera traité dans les 24 heures.</p>
+              </div>
+            `,
+            confirmButtonColor: 'var(--primary-green)',
+            confirmButtonText: '👍 Parfait !',
+            showConfirmButton: true,
+            timer: 8000,
+            timerProgressBar: false
+          });
+        } else {
+          // Erreur côté serveur
+          throw new Error(data.message || 'Erreur lors du traitement du virement');
+        }
+        
+      } catch (error) {
+        console.error('Erreur:', error);
+        
+        // Animation d'erreur
+        submitBtn.style.background = 'linear-gradient(135deg, var(--danger-red), #dc2626)';
+        submitBtn.innerHTML = '<i class="fas fa-times"></i> Erreur lors du virement';
+        
+        // Message d'erreur détaillé
+        let errorMessage = error.message || 'Une erreur est survenue lors du virement';
+        let errorTitle = 'Echec de virement';
+        
+        // Différents types d'erreurs
+        if (error.message && error.message.includes('HTTP')) {
+          errorTitle = 'Erreur de connexion';
+          errorMessage = 'Impossible de contacter le serveur. Vérifiez votre connexion internet.';
+        }
+        
+        await Swal.fire({
+          icon: 'error',
+          title: errorTitle,
+          html: `
+            
+          `,
+          confirmButtonColor: 'var(--danger-red)',
+          confirmButtonText: '🔄 Réessayer',
+          showCancelButton: true,
+          cancelButtonText: '❌ Fermer'
+        });
+      } finally {
+        // Restaurer le bouton après 3 secondes
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.querySelector('.loading').style.display = 'none';
+          submitBtn.querySelector('i').style.display = 'inline';
+          submitBtn.style.background = 'linear-gradient(135deg, var(--primary-green), var(--light-green))';
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Valider le virement <div class="loading"><div class="spinner"></div></div>';
+        }, 3000);
+      }
+    });
+
+
+
+    // Fonction de déconnexion
+    function deconnexion() {
+      Swal.fire({
+        title: 'Déconnexion',
+        text: 'Êtes-vous sûr de vouloir vous déconnecter ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--primary-green)',
+        cancelButtonColor: 'var(--text-secondary)',
+        confirmButtonText: 'Oui, me déconnecter',
+        cancelButtonText: 'Annuler'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Animation de déconnexion
+          document.body.style.opacity = '0';
+          document.body.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            window.location.href = 'connexion.html';
+          }, 300);
+        }
+      });
+    }
+
+    // Validation en temps réel
+    const requiredFields = ['nom', 'prenom', 'banque', 'iban', 'montant', 'libelle'];
+    requiredFields.forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      field.addEventListener('blur', function() {
+        if (this.value.trim() === '') {
+          this.style.borderColor = 'var(--danger-red)';
+          this.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+        } else {
+          this.style.borderColor = 'var(--success-green)';
+          this.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
